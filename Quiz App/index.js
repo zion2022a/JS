@@ -1,53 +1,145 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+const quizData=[
+    {
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
+        q:"Which is the captail of India",
+        a: 'Mumbai',
+        b:'Delhi',
+        c: 'Chennai',
+        d: 'Kolkata',
+        correct:'b'
+    },
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    {
+        q:"Which is the most popular programming language",
+        a:'JavaScript',
+        b:'Java',
+        c:'C++',
+        d:'Python',
+        correct:'a'
+    },
 
-    <!-- fonts -->
+    {
+        q:"Who was the founder of Apple Inc",
+        a:'Steve Wozniak',
+        b:'Bill Gates',
+        c:'Elon Musk',
+        d:'Steve Jobbs',
+        correct:'d'
+    },
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap" rel="stylesheet">
-</head>
-<body>
+    {
+        q:"What does the Internet prefix WWW stand for?",
+        a:'Western Washington World',
+        b:'Wide Width Wickets',
+        c:'World Wide Web',
+        d:'Worldwide Weather',
+        correct:'c'
+    },
+
+    {
+        q:"Which of these products is not made by the Apple Corporation",
+        a:'Ipod',
+        b:'Ipad',
+        c:'IMax',
+        d:'Iphone',
+        correct:'c'
+    }
+
+    ];
+
+
+    let currentq=0;
+    let a1=document.getElementById('a_text');
+    let b1=document.getElementById('b_text');
+    let c1=document.getElementById('c_text');
+    let d1=document.getElementById('d_text');
+
+    const ques=document.getElementById('question');
+
+    let selans=undefined;
+    let score=0;
+
+    function quiz(currentq){
+
+        deselect();
+
+        if(currentq>=quizData.length){
+
+            $('.quiz-container').html('<h4>Your score is '+score+'/'+quizData.length+'</h4>');
+           // alert("Quiz Over");
+        }
+        else{
+
+            ques.innerHTML=quizData[currentq].q;
+            a1.innerHTML=quizData[currentq].a;
+            b1.innerHTML=quizData[currentq].b;
+            c1.innerHTML=quizData[currentq].c;
+            d1.innerHTML=quizData[currentq].d;
+        }
+
+       
+        
+
+        // $('.btn').click(function (){
+
+        //     currentq++;
+        //     quiz(currentq);
+
+        // });
+        
+    }
+    quiz(currentq);
+
+    function deselect(){
+
+        const ans1=document.querySelectorAll('.answer');
+
+        ans1.forEach( (ans1)=>{
+
+            
+            ans1.checked=false;
+            
+        })
+    }
+
+
+    function check(){
+
+        selans=undefined;
+        const ans=document.querySelectorAll('.answer');
+
+        ans.forEach((ans)=>{
+
+            if(ans.checked){
+                selans=ans.id;
+            }
+            
+            // console.log(ans.checked);
+            
+           
+    });
+
     
-    <!-- <h1>Hello there</h1> -->
-    <div class="quiz-container">
+}
 
-        <h4 id="question">Question</h4>
-        <ul>
-            <li>
+    $('.btn').click( ()=>{
 
-                <input type="radio" id="a" class="answer" name="answer">
-                <label for="'a" id="a_text"> Question</label>
-            </li>
-            <li>
-                <input type="radio" id="b" class="answer" name="answer">
-                <label for="'b" id="b_text"> Question</label>
-            </li>
-            <li>
-            <input type="radio" id="c" class="answer" name="answer">
-                <label for="'c" id="c_text"> Question</label>
-            </li>
-            <li>
-                <input type="radio" id="d" class="answer" name="answer">
-                <label for="'d" id="d_text"> Question</label>
-            </li>
-        </ul>
+        check();
 
-        <button class="btn btn-primary"> submit</button>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <script src="index.js"></script>
-</body>
-</html>
+        if(selans){
+            console.log(selans);
+            
+
+            if(selans==quizData[currentq].correct){
+                score++;
+            }
+            currentq++;
+            console.log(score);
+            quiz(currentq);
+        }
+
+        
+    });
+    check();
+    
