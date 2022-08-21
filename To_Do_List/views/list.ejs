@@ -1,39 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+<%- include("header") -%>
 
-    <div class="box" id="heading">
-        <h2><%=kday %>  !</h2>
-    </div>
-    
-        <div class="box">
+  <div class="box" id="heading">
+    <h1> <%= listTitle %> </h1>
+  </div>
 
-     
-           <% for(var i=0;i<newlistitems.length;i++){ %>
+  <div class="box">
+    <% for (let i=0; i<newListItems.length; i++) { %>
+      <div class="item">
+        <input type="checkbox">
+        <p><%=  newListItems[i].name  %></p>
+      </div>
+      <% } %>
 
-            <div class="item">
-                <input type="checkbox">
-                <p><%= newlistitems[i]  %></p>
-            </div>
-           <% } %>
-
-           <form action="/" method="post">
-
-                <input type="text" name="text1" placeholder="New item" autocomplete="off">
-                <button type="submit">+</button>
-
-        </form>
-        </div> 
-       
-
-        
-    
-</body>
-</html>
+      <form class="item" action="/" method="post">
+        <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+        <button type="submit" name="list">+</button>
+      </form>
+  </div>
+ 
+<%- include("footer") -%>
