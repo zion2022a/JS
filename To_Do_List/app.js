@@ -23,8 +23,16 @@ const itemSchema=new mongoose.Schema({
   name:String,
  
 });
+const listSchema=new mongoose.Schema({
+
+  name:String,
+  items:[itemSchema]
+ 
+});
 
 const Item=mongoose.model("Item",itemSchema);
+const List=mongoose.model("List",listSchema);
+
 
 const item1=new Item({
 
@@ -94,7 +102,7 @@ app.get("/", function(req, res) {
       }
       
       else{
-          res.render("list", {listTitle: day, newListItems: items});
+          res.render("list", {listTitle: "Today", newListItems: items});
       }
         
       // mongoose.connection.close();
@@ -107,9 +115,82 @@ app.get("/", function(req, res) {
 
 });
 
+// Custom routes
+
+app.get("/:paramname", function(req, res) {
+
+  const day = date.getDate();
+  const clistname=req.params.paramname;
+
+ // console.log(clistname);
+
+  List.findOne({name:clistname},(err,flist)=>{
+
+    if(!err){
+
+      if(!flist){
+        //create new list
+        console.log("Not Exist")
+        const list2=new List({
+
+          name:clistname,
+          items:[item1,item2]
+          
+          
+        });
+        list2.save();
+        res.redirect("/"+clistname);
+
+
+      }
+      else{
+        // console.log("Exist");
+        // console.log(flist);
+         res.render("list", {listTitle: flist.name, newListItems: flist.items});
+        
+      }
+    }
+  });
+
+  // List.find((err,lists)=>{
+
+  //   if(err){
+  //       console.log("error");
+  //   }
+  //   else{
+
+  //     if(lists.length==0){
+
+  //       List.insertMany([item1,item2],(err)=>{
+
+  //         if(err){
+  //             console.log(err);
+  //         }
+  //         else{
+  //             console.log("insertion successful");
+  //         }
+  //       });
+  //       res.redirect('/:paramname');
+  //     }
+      
+  //     else{
+  //         res.render("list", {listTitle: clistname, newListItems: lists});
+        
+  //     // mongoose.connection.close();
+
+        
+  //   }
+  // }
+  // })
+
+  
+
+});
+
 app.post("/", function(req, res){
 
   const item = req.body.newItem;
+  const list1=req.body.list;
 
   const item4=new Item({
 
@@ -118,16 +199,70 @@ app.post("/", function(req, res){
     
   });
 
-  Item.insertMany([item4],(err)=>{
+  if(list1=="Today"){
 
-    if(err){
-        console.log(err);
-    }
-    else{
-        console.log("Inserted one item successfully");
+    item4.save();
+    res.redirect('/');
+  }
+  else{
+   // console.log(list1);
+
+    List.findOne({name:list1},(err,flist)=>{
+
+      flist.items.push(item4);
+      flist.save();
+      res.redirect("/"+ list1);
+    });
+  }
+
+
+
+
+  // Item.insertMany([item4],(err)=>{
+
+  //   if(err){
+  //       console.log(err);
+  //   }
+  //   else{
+  //       console.log("Inserted one item successfully");
+  //       res.redirect('/');
+  //   }
+  // });
+  
+});
+
+app.post("/delete",(req,res)=>{
+
+  const itemid=req.body.checkbox;
+  const title=req.body.listt;
+
+  if(title=="Today"){
+
+    Item.findByIdAndRemove(itemid,(err)=>{
+      if(err){
+        console.log("Error");
+      }
+      else{
+        console.log("item removed successfully");
         res.redirect('/');
-    }
-  });
+      }
+    })
+  }
+  else{
+    console.log(title);
+    console.log(itemid);
+
+      List.findOneAndUpdate({name:title},{ $pull: {items: {_id:itemid}}},(err,flist)=>{
+        if(!err){
+          console.log("Item removed ");
+          flist.save();
+          res.redirect('/'+title);
+        }
+      })
+  }
+
+ 
+  // res.redirect('/');
   
 });
 
