@@ -31,7 +31,7 @@ const quizData=[
     {
         q:"What does the Internet prefix WWW stand for?",
         a:'Western Washington World',
-        b:'Wide Width Wickets',
+        b:'Wide Wide Wickets',
         c:'World Wide Web',
         d:'Worldwide Weather',
         correct:'c'
@@ -59,6 +59,8 @@ const quizData=[
 
     let selans=undefined;
     let score=0;
+
+//  
 
     function quiz(currentq){
 
